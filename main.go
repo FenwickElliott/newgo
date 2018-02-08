@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"io/ioutil"
 	"os"
 )
 
@@ -12,6 +13,7 @@ func main() {
 	flag.Parse()
 	err := os.Mkdir(*name, 0755)
 	check(err)
+	err = ioutil.WriteFile("./dry/main.go", []byte("package main\n\nfunc main() {\n\n}"), 0644)
 }
 
 func check(err error) {
