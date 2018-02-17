@@ -19,6 +19,6 @@ func main() {
 
 func check(err error) {
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("Error: ", err)
 	}
 }
