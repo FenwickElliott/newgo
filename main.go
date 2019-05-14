@@ -11,6 +11,8 @@ func main() {
 	fatal(ioutil.WriteFile("main.go", []byte(`package main
 
 import (
+	"log"
+	
 	"github.com/brideclick/initialize"
 )
 
