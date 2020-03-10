@@ -7,13 +7,11 @@ import (
 	"path"
 )
 
-func main() {
-	fatal(ioutil.WriteFile("main.go", []byte(`package main
+var (
+	mainTemplate = `package main
 
 import (
 	"log"
-	
-	"github.com/brideclick/initialize"
 )
 
 func main() {
@@ -21,20 +19,45 @@ func main() {
 }
 
 func init() {
-	err := initialize.Viper()
-	fatal(err)
+
 }
 
 func fatal(err error) {
 	if err != nil {
 		log.Fatal(err)
 	}
-}`), 0644))
+}`
+)
 
-	fatal(os.Mkdir("config", 0755))
+func main() {
+	_, err := os.Stat("main.go")
+	if err != nil && os.IsNotExist(err) {
+		err = ioutil.WriteFile("main.go", []byte(mainTemplate), 0644)
+		fatal(err)
+	}
 
-	fatal(ioutil.WriteFile(path.Join("config", "dev.json"), []byte("{\n\n}"), 0644))
-	fatal(ioutil.WriteFile(path.Join("config", "prod.json"), []byte("{\n\n}"), 0644))
+	_, err = os.Stat("config")
+	if err != nil && os.IsNotExist(err) {
+		err = os.Mkdir("config", 0744)
+		fatal(err)
+	}
+
+	_, err = os.Stat(path.Join("config", "dev.json"))
+	if err != nil {
+		if os.IsNotExist(err) {
+			err = ioutil.WriteFile(path.Join("config", "dev.json"), []byte("{\n\n}"), 0644)
+			fatal(err)
+		} else {
+			log.Println(err)
+		}
+	}
+
+	_, err = os.Stat(path.Join("config", "prod.json"))
+	if err != nil && os.IsNotExist(err) {
+		err = ioutil.WriteFile(path.Join("config", "prod.json"), []byte("{\n\n}"), 0644)
+		fatal(err)
+	}
+
 }
 
 func fatal(err error) {
