@@ -25,7 +25,7 @@ func init() {
 func fatal(err error) {
 	if err != nil {
 		_, filename, linenumber, _ := runtime.Caller(1)
-		log.Printf("fatal error thrown by '%s:%d', error: '%s'", filename, linenumber, err)
+		log.Fatalf("fatal error thrown by '%s:%d', error: '%s'", filename, linenumber, err)
 	}
 }
 `
